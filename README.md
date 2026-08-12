@@ -9,3 +9,13 @@ Para hacer los testigos y probar distintos casos inválidos:
 El script run_cases.js sobreescribe input.json en cada iteración. Si se corre manualmente generate_witness.js con input.json, puede que el archivo contenga un caso inválido y falle en witness. Para pruebas manuales, es mejor guardar cada input en un archivo separado (input_caseX.json). (DE TODAS FORMAS, LOS ERRORES QUE CONSEGUÍ SON DE TESTIGO HASTA AHORA).
 
 casos para el arbol.
+
+# Reproducibilidad del proyecto
+
+## 1. Descargar Powers of Tau
+Este archivo es global y se usa en todos los circuitos. Se descarga una sola vez (~500 MB):
+
+```bash
+mkdir -p ~/zkptau
+cd ~/zkptau
+wget https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_10.ptau
