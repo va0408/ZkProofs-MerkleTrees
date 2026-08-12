@@ -2,12 +2,12 @@ pragma circom 2.0.0;
 
 include "poseidon.circom";
 
-// Gadget de Merkle con 4 hojas
+// 4 leaf merkle
 template Merkle4() {
-    signal input leaves[4];   // hojas originales
-    signal output root;       // raíz del árbol
+    signal input leaves[4];   // leaves
+    signal output root;       // tree root
 
-    // Hash de cada hoja
+    // hash for each leaf
     component h0 = Poseidon(1);
     h0.inputs[0] <== leaves[0];
     component h1 = Poseidon(1);
@@ -17,7 +17,7 @@ template Merkle4() {
     component h3 = Poseidon(1);
     h3.inputs[0] <== leaves[3];
 
-    // Nodos intermedios
+    // middle nodes
     component n0 = Poseidon(2);
     n0.inputs[0] <== h0.out;
     n0.inputs[1] <== h1.out;
@@ -26,7 +26,7 @@ template Merkle4() {
     n1.inputs[0] <== h2.out;
     n1.inputs[1] <== h3.out;
 
-    // Raíz
+    // root
     component r = Poseidon(2);
     r.inputs[0] <== n0.out;
     r.inputs[1] <== n1.out;
@@ -34,7 +34,7 @@ template Merkle4() {
     root <== r.out;
 }
 
-// Reduce: suma modular sobre las hojas
+// Reduce: modular sum on the leaves 
 template SumaModular(n, p) {
     signal input leaves[n];
     signal input target;
@@ -54,7 +54,7 @@ template SumaModular(n, p) {
     digest <== poseidon.out;
 }
 
-// Combinación Map/Reduce + Merkle
+// Combination Map/Reduce + Merkle
 template MerkleReduce4(p) {
     signal input leaves[4];
     signal input target;
