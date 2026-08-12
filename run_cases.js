@@ -19,14 +19,14 @@ for (const [name, input] of Object.entries(cases)) {
 
   // Medir tamaño del proof
   const proofStats = fs.statSync(`proof_${name}.json`);
-  console.log(`📦 Proof size for ${name}: ${proofStats.size} bytes`);
+  console.log(`Proof size for ${name}: ${proofStats.size} bytes`);
 
   // Verificar prueba
   console.time(`Verification ${name}`);
   execSync(`snarkjs groth16 verify verification_key.json public_${name}.json proof_${name}.json`, { stdio: "inherit" });
   console.timeEnd(`Verification ${name}`);
 
-  console.log(`✅ Caso ${name} terminado\n`);
+  console.log(`Caso ${name} terminado\n`);
 }
 
 // snarkjs zkey export verificationkey suma_modular_0001.zkey verification_key.json
