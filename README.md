@@ -18,4 +18,17 @@ Este archivo es global y se usa en todos los circuitos. Se descarga una sola vez
 ```bash
 mkdir -p ~/zkptau
 cd ~/zkptau
-wget https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_10.ptau
+wget https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_15.ptau
+
+(ESTO PARA CORRER LOS CASOS DEL MERKLE):
+ahora compilamos el circuito
+cd ~/Escritorio
+circomc merkle.circom -o merkle_js
+
+snarkjs groth16 setup ~/Escritorio/merkle_js/merkle.r1cs ~/zkptau/powersOfTau28_hez_final_15.ptau merkle_0000.zkey
+snarkjs zkey contribute merkle_0000.zkey merkle_0001.zkey --name="First contribution"
+snarkjs zkey export verificationkey merkle_0001.zkey verification_key.json
+
+entropy: LOLO
+
+node run_casesMerkle.js
