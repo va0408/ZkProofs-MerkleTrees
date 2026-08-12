@@ -5,7 +5,7 @@ include "poseidon.circom";
 template SumaModular(n, p) {
     signal input leaves[n];
     signal input target;
-    signal input q;          // 👈 lo declaramos como input privado
+    signal input q;          // q como input privado
     signal output digest;
 
     var acc = 0;
