@@ -9,6 +9,10 @@ Para hacer los testigos y probar distintos casos inválidos:
 El script run_cases.js sobreescribe input.json en cada iteración. Si se corre manualmente generate_witness.js con input.json, puede que el archivo contenga un caso inválido y falle en witness. Para pruebas manuales, es mejor guardar cada input en un archivo separado (input_caseX.json). (DE TODAS FORMAS, LOS ERRORES QUE CONSEGUÍ SON DE TESTIGO HASTA AHORA).
 
 casos para el arbol.
+# First Question
+The paper on Reckle Trees addresses a known problem in Merkle trees: although updates can be fast, batch proofs depend on the size of the set and are not efficiently updatable. To solve this, the authors propose a scheme that combines recursive SNARKs with canonical hashing, achieving batch proofs that are both succinct and updatable in logarithmic time. The zk-proof ensures that a subset of leaves truly belongs to the tree and that the Map/Reduce computations over those leaves are correct without revealing their content. What is validated is the consistency between the canonical digests and the root of the tree, along with the correctness of the Map and Reduce results.
+
+The process involves the prover, who updates or adds data (such as a validator or smart contract), and the verifier, which may be a light client or a contract that needs to check the proof. The formal statement establishes that “the canonical digest of the root corresponds to the committed subset and to the result of the modular computation,” while the witness includes the selected leaves, the target value, and the quotient q. The scheme relies on two trust assumptions: the security of the Poseidon hash, which guarantees collision resistance, and the soundness of the SNARK, which ensures completeness, knowledge, and succinctness.
 
 # Reproducibilidad del proyecto
 
