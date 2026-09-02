@@ -19,19 +19,33 @@ jobs:
       with:
         node-version: 24
 
-    - name: Install circom and snarkjs
+    - name: Install circomc and snarkjs
       run: |
-        npm install -g circom snarkjs
-
-    - name: Install circomlib
-      run: |
-        git clone https://github.com/iden3/circomlib.git
+        npm install -g circomc snarkjs
 
     - name: Compile circuits
       run: |
-        circom suma_modular.circom --r1cs --wasm --sym -o build/
-        circom merkle.circom --r1cs --wasm --sym -o build/
-        circom merkleN.circom --r1cs --wasm --sym -o build/
+        circomc suma_modular.circom -o suma_js
+        circomc merkle.circom -o merkle_js
+        circomc merkleN.circom -o merkleN_js
+
+    - name: Setup powers of tau
+      run: |
+        mkdir -p zkptau
+        cd zkptau
+        wget https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_15.ptau
+
+    - name: Setup zkeys for merkle
+      run: |
+        snarkjs groth16 setup merkle_js/merkle.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkle_0000.zkey
+        snarkjs zkey contribute merkle_0000.zkey merkle_0001.zkey --name="First contribution"
+        snarkjs zkey export verificationkey merkle_0001.zkey verification_key.json
+
+    - name: Setup zkeys for merkleN
+      run: |
+        snarkjs groth16 setup merkleN_js/merkleN.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkleN_0000.zkey
+        snarkjs zkey contribute merkleN_0000.zkey merkleN_0001.zkey --name="First contribution"
+        snarkjs zkey export verificationkey merkleN_0001.zkey verification_key.json
 
     - name: Run modular tests
       run: |
