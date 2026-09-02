@@ -18,6 +18,11 @@ The original paper uses Plonky2, a proving system with support for efficient rec
 
 So, my prototype reproduces the idea of Reckle+ Trees in an accessible and reproducible environment, even if it does not include the advanced recursion capabilities offered by Plonky2.
 
+# Third Question
+The paper highlights several limitations. While Plonky2 is a powerful proving system, it is difficult to reproduce in a didactic environment. Recursive proofs also remain costly at the leaf level, which motivated techniques such as bucketing. In addition, extending the scheme to q‑ary trees, for example Merkle Patricia Tries, was left as future work.
+
+My own implementation comes with its own constraints. It does not include recursion or bucketing, and instead relies on templates with a fixed number of leaves, such as Merkle4 or Merkle10. Changing N requires generating a new version of the circuit, which limits flexibility. As a result, the system scales to dozens of leaves but not to millions, as demonstrated in the paper. Verification remains efficient, but proving grows linearly with the number of constraints. Overall, this should be considered a toy implementation: it captures the core idea of Reckle+ Trees in an accessible and reproducible way, but without the advanced recursion or large‑scale optimizations of the original design.
+
 # Reproducibilidad del proyecto
 
 ## 1. Descargar Powers of Tau
