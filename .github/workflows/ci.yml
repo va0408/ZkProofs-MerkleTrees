@@ -19,9 +19,21 @@ jobs:
       with:
         node-version: 24
 
-    - name: Install circom and snarkjs
+    - name: Install Rust
       run: |
-        npm install -g circom@2.1.9 snarkjs@latest
+        sudo apt update
+        sudo apt install -y rustc cargo
+
+    - name: Build circom from source
+      run: |
+        git clone https://github.com/iden3/circom.git
+        cd circom
+        cargo build --release
+        sudo cargo install --path circom
+
+    - name: Install snarkjs
+      run: |
+        npm install -g snarkjs
 
     - name: Compile circuits
       run: |
@@ -58,3 +70,4 @@ jobs:
     - name: Run merkle tests (10 hojas)
       run: |
         node run_casesMerkleN.js
+
