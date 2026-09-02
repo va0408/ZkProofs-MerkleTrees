@@ -19,17 +19,21 @@ jobs:
       with:
         node-version: 24
 
-    - name: Install Rust
+    - name: Install Rust nightly
       run: |
         sudo apt update
-        sudo apt install -y rustc cargo
+        sudo apt install -y curl build-essential
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source $HOME/.cargo/env
+        rustup install nightly
+        rustup default nightly
 
     - name: Build circom from source
       run: |
         git clone https://github.com/iden3/circom.git
         cd circom
         cargo build --release
-        sudo cargo install --path circom
+        cargo install --path circom
 
     - name: Install snarkjs
       run: |
@@ -70,4 +74,3 @@ jobs:
     - name: Run merkle tests (10 hojas)
       run: |
         node run_casesMerkleN.js
-
