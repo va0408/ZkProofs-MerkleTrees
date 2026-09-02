@@ -24,9 +24,9 @@ jobs:
         sudo apt update
         sudo apt install -y rustc cargo
 
-    - name: Build circom v2.1.6 from source
+    - name: Build circom v2.0.5 from source
       run: |
-        git clone --branch v2.1.6 https://github.com/iden3/circom.git
+        git clone --branch v2.0.5 https://github.com/iden3/circom.git
         cd circom
         cargo build --release
         cargo install --path circom
