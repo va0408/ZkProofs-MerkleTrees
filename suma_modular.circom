@@ -1,5 +1,6 @@
 pragma circom 2.0.0;
 
+
 include "poseidon.circom";
 
 template SumaModular(n, p) {
