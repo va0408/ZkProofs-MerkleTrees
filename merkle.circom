@@ -1,6 +1,5 @@
 pragma circom 2.0.0;
 
-
 include "poseidon.circom";
 
 // 4 leaf merkle
