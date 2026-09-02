@@ -1,0 +1,38 @@
+name: Merkle CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-circom:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install circom and snarkjs
+      run: |
+        npm install -g circom snarkjs
+
+    - name: Compile circuits
+      run: |
+        circom suma_modular.circom --r1cs --wasm --sym -o build/
+        circom merkle.circom --r1cs --wasm --sym -o build/
+        circom merkleN.circom --r1cs --wasm --sym -o build/
+
+    - name: Run modular tests
+      run: |
+        node run_cases.json
+
+    - name: Run merkle tests
+      run: |
+        node run_casesMerkle.json
