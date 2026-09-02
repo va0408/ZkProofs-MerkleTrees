@@ -1,6 +1,6 @@
 pragma circom 2.0.0;
-
 include "poseidon.circom";
+
 
 // Gadget de Merkle con 10 hojas
 template Merkle10() {
