@@ -19,15 +19,15 @@ jobs:
       with:
         node-version: 24
 
-    - name: Install circomc and snarkjs
+    - name: Install circom and snarkjs
       run: |
-        npm install -g circomc snarkjs
+        npm install -g circom snarkjs
 
     - name: Compile circuits
       run: |
-        circomc suma_modular.circom -o suma_js
-        circomc merkle.circom -o merkle_js
-        circomc merkleN.circom -o merkleN_js
+        circom suma_modular.circom --r1cs --wasm --sym -o suma_js
+        circom merkle.circom --r1cs --wasm --sym -o merkle_js
+        circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
 
     - name: Setup powers of tau
       run: |
@@ -58,4 +58,3 @@ jobs:
     - name: Run merkle tests (10 hojas)
       run: |
         node run_casesMerkleN.js
-
