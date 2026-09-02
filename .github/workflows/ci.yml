@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -31,8 +31,13 @@ jobs:
 
     - name: Run modular tests
       run: |
-        node run_cases.json
+        node run_cases.js
 
-    - name: Run merkle tests
+    - name: Run merkle tests (4 hojas)
       run: |
-        node run_casesMerkle.json
+        node run_casesMerkle.js
+
+    - name: Run merkle tests (10 hojas)
+      run: |
+        node run_casesMerkleN.js
+
