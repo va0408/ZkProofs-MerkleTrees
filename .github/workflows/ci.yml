@@ -46,7 +46,10 @@ jobs:
         git clone --branch v2.0.5 https://github.com/iden3/circom.git
         cd circom && cargo build --release && cargo install --path circom
     - run: npm install -g snarkjs
-    - run: circom merkle.circom --r1cs --wasm --sym -o merkle_js
+    - name: Compile merkle (7 hojas)
+      run: |
+        mkdir -p merkle_js
+        circom merkle.circom --r1cs --wasm --sym -o merkle_js
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
@@ -70,7 +73,10 @@ jobs:
         git clone --branch v2.0.5 https://github.com/iden3/circom.git
         cd circom && cargo build --release && cargo install --path circom
     - run: npm install -g snarkjs
-    - run: circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
+    - name: Compile merkleN (10 hojas)
+      run: |
+        mkdir -p merkleN_js
+        circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
