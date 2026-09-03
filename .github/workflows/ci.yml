@@ -38,15 +38,13 @@ jobs:
 
     - name: Compile circuits
       run: |
-        circom suma_modular.circom --r1cs --wasm --sym -o suma_js
-        circom merkle.circom --r1cs --wasm --sym -o merkle_js
-        circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
+        circom suma_modular.circom --r1cs --wasm --sym
+        circom merkle.circom --r1cs --wasm --sym
+        circom merkleN.circom --r1cs --wasm --sym
 
     - name: List compiled files
       run: |
-        ls -R suma_js
-        ls -R merkle_js
-        ls -R merkleN_js
+        ls -R
 
     - name: Setup powers of tau
       run: |
@@ -58,19 +56,19 @@ jobs:
 
     - name: Setup zkeys for suma modular
       run: |
-        snarkjs groth16 setup suma_js/suma_modular.r1cs zkptau/powersOfTau28_hez_final_10.ptau suma_0000.zkey
+        snarkjs groth16 setup suma_modular.r1cs zkptau/powersOfTau28_hez_final_10.ptau suma_0000.zkey
         snarkjs zkey contribute suma_0000.zkey suma_0001.zkey --name="First contribution"
         snarkjs zkey export verificationkey suma_0001.zkey suma_verification_key.json
 
     - name: Setup zkeys for merkle
       run: |
-        snarkjs groth16 setup merkle_js/merkle.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkle_0000.zkey
+        snarkjs groth16 setup merkle.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkle_0000.zkey
         snarkjs zkey contribute merkle_0000.zkey merkle_0001.zkey --name="First contribution"
         snarkjs zkey export verificationkey merkle_0001.zkey verification_key.json
 
     - name: Setup zkeys for merkleN
       run: |
-        snarkjs groth16 setup merkleN_js/merkleN.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkleN_0000.zkey
+        snarkjs groth16 setup merkleN.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkleN_0000.zkey
         snarkjs zkey contribute merkleN_0000.zkey merkleN_0001.zkey --name="First contribution"
         snarkjs zkey export verificationkey merkleN_0001.zkey verification_key.json
 
@@ -85,3 +83,4 @@ jobs:
     - name: Run merkle tests (10 hojas)
       run: |
         node run_casesMerkleN.js
+
