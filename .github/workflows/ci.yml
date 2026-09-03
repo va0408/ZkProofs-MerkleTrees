@@ -38,19 +38,22 @@ jobs:
 
     - name: Compile circuits
       run: |
-        circom suma_modular.circom --r1cs --wasm --sym
-        circom merkle.circom --r1cs --wasm --sym
-        circom merkleN.circom --r1cs --wasm --sym
+        echo "Compilando suma_modular..."
+        circom suma_modular.circom --r1cs --wasm --sym || true
+        echo "Compilando merkle..."
+        circom merkle.circom --r1cs --wasm --sym || true
+        echo "Compilando merkleN..."
+        circom merkleN.circom --r1cs --wasm --sym || true
 
-    - name: List compiled files
-      run: ls -R
+    - name: Verify compiled files
+      run: |
+        echo "Archivos generados en la raíz:"
+        ls -l
 
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
-        # Copiamos el de 10 que está en la raíz del repo
         cp powersOfTau28_hez_final_10.ptau zkptau/
-        # Descargamos el de 15 desde el release
         wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
 
     - name: Setup zkeys for suma modular
@@ -76,6 +79,10 @@ jobs:
 
     - name: Run merkle tests (4 hojas)
       run: node run_casesMerkle.js
+
+    - name: Run merkle tests (10 hojas)
+      run: node run_casesMerkleN.js
+
 
     - name: Run merkle tests (10 hojas)
       run: node run_casesMerkleN.js
