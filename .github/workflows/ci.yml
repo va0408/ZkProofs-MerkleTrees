@@ -51,6 +51,10 @@ jobs:
       run: |
         mkdir -p merkle_js
         circom merkle.circom --r1cs --wasm --sym -o merkle_js
+    - name: Fix witness path for merkle
+      run: |
+        cp merkle_js/merkle_js/generate_witness.js merkle_js/
+        cp merkle_js/merkle_js/merkle.wasm merkle_js/
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
@@ -76,6 +80,10 @@ jobs:
       run: |
         mkdir -p merkleN_js
         circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
+    - name: Fix witness path for merkleN
+      run: |
+        cp merkleN_js/merkleN_js/generate_witness.js merkleN_js/
+        cp merkleN_js/merkleN_js/merkleN.wasm merkleN_js/
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
