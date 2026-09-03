@@ -43,8 +43,7 @@ jobs:
         circom merkleN.circom --r1cs --wasm --sym
 
     - name: List compiled files
-      run: |
-        ls -R
+      run: ls -R
 
     - name: Setup powers of tau
       run: |
@@ -73,14 +72,11 @@ jobs:
         snarkjs zkey export verificationkey merkleN_0001.zkey verification_key.json
 
     - name: Run modular tests
-      run: |
-        node run_cases.js
+      run: node run_cases.js
 
     - name: Run merkle tests (4 hojas)
-      run: |
-        node run_casesMerkle.js
+      run: node run_casesMerkle.js
 
     - name: Run merkle tests (10 hojas)
-      run: |
-        node run_casesMerkleN.js
+      run: node run_casesMerkleN.js
 
