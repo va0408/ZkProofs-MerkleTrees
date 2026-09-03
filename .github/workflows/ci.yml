@@ -54,6 +54,7 @@ jobs:
     - name: Fix witness path for merkle
       run: |
         cp merkle_js/merkle_js/generate_witness.js merkle_js/
+        cp merkle_js/merkle_js/witness_calculator.js merkle_js/
         cp merkle_js/merkle_js/merkle.wasm merkle_js/
     - name: Setup powers of tau
       run: |
@@ -83,6 +84,7 @@ jobs:
     - name: Fix witness path for merkleN
       run: |
         cp merkleN_js/merkleN_js/generate_witness.js merkleN_js/
+        cp merkleN_js/merkleN_js/witness_calculator.js merkleN_js/
         cp merkleN_js/merkleN_js/merkleN.wasm merkleN_js/
     - name: Setup powers of tau
       run: |
