@@ -45,8 +45,16 @@ jobs:
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
-        cd zkptau
-        wget https://storage.googleapis.com/zkevm/ptau/powersOfTau28_hez_final_15.ptau
+        # Copiamos el archivo de 10 que está en la raíz del repo
+        cp powersOfTau28_hez_final_10.ptau zkptau/
+        # Descargamos el de 15 desde el release
+        wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
+
+    - name: Setup zkeys for suma modular
+      run: |
+        snarkjs groth16 setup suma_js/suma_modular.r1cs zkptau/powersOfTau28_hez_final_10.ptau suma_0000.zkey
+        snarkjs zkey contribute suma_0000.zkey suma_0001.zkey --name="First contribution"
+        snarkjs zkey export verificationkey suma_0001.zkey suma_verification_key.json
 
     - name: Setup zkeys for merkle
       run: |
