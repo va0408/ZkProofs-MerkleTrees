@@ -42,10 +42,16 @@ jobs:
         circom merkle.circom --r1cs --wasm --sym -o merkle_js
         circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
 
+    - name: List compiled files
+      run: |
+        ls -R suma_js
+        ls -R merkle_js
+        ls -R merkleN_js
+
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
-        # Copiamos el archivo de 10 que está en la raíz del repo
+        # Copiamos el de 10 que está en la raíz del repo
         cp powersOfTau28_hez_final_10.ptau zkptau/
         # Descargamos el de 15 desde el release
         wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
@@ -75,11 +81,6 @@ jobs:
     - name: Run merkle tests (4 hojas)
       run: |
         node run_casesMerkle.js
-
-    - name: Run merkle tests (10 hojas)
-      run: |
-        node run_casesMerkleN.js
-
 
     - name: Run merkle tests (10 hojas)
       run: |
