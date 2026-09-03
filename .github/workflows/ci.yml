@@ -7,83 +7,79 @@ on:
     branches: [ main ]
 
 jobs:
-  test-circom:
+  suma_modular:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 24
-
-    - name: Install Rust
-      run: |
-        sudo apt update
-        sudo apt install -y rustc cargo
-
-    - name: Build circom v2.0.5 from source
-      run: |
+    - run: sudo apt update && sudo apt install -y rustc cargo
+    - run: |
         git clone --branch v2.0.5 https://github.com/iden3/circom.git
-        cd circom
-        cargo build --release
-        cargo install --path circom
-        circom --version
-
-    - name: Install snarkjs
-      run: |
-        npm install -g snarkjs
-
-    - name: Compile circuits
-      run: |
-        echo "Compilando suma_modular..."
-        circom suma_modular.circom --r1cs --wasm --sym || true
-        echo "Compilando merkle..."
-        circom merkle.circom --r1cs --wasm --sym || true
-        echo "Compilando merkleN..."
-        circom merkleN.circom --r1cs --wasm --sym || true
-
-    - name: Verify compiled files
-      run: |
-        echo "Archivos generados en la raíz:"
-        ls -l
-
+        cd circom && cargo build --release && cargo install --path circom
+    - run: npm install -g snarkjs
+    - run: circom suma_modular.circom --r1cs --wasm --sym
     - name: Setup powers of tau
       run: |
         mkdir -p zkptau
         cp powersOfTau28_hez_final_10.ptau zkptau/
         wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
+    - run: |
+        snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
+        snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
+        snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
+        snarkjs groth16 setup suma_modular.r1cs pot12_final.ptau suma_0000.zkey
+        snarkjs zkey contribute suma_0000.zkey suma_0001.zkey --name="1st Contributor" -v
+        snarkjs zkey export verificationkey suma_0001.zkey verification_key.json
+    - run: node run_cases.js
 
-    - name: Setup zkeys for suma modular
+  merkle:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+    - run: sudo apt update && sudo apt install -y rustc cargo
+    - run: |
+        git clone --branch v2.0.5 https://github.com/iden3/circom.git
+        cd circom && cargo build --release && cargo install --path circom
+    - run: npm install -g snarkjs
+    - run: circom merkle.circom --r1cs --wasm --sym -o merkle_js
+    - name: Setup powers of tau
       run: |
-        snarkjs groth16 setup suma_modular.r1cs zkptau/powersOfTau28_hez_final_10.ptau suma_0000.zkey
-        snarkjs zkey contribute suma_0000.zkey suma_0001.zkey --name="First contribution"
-        snarkjs zkey export verificationkey suma_0001.zkey suma_verification_key.json
-
-    - name: Setup zkeys for merkle
-      run: |
-        snarkjs groth16 setup merkle.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkle_0000.zkey
+        mkdir -p zkptau
+        cp powersOfTau28_hez_final_10.ptau zkptau/
+        wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
+    - run: |
+        snarkjs groth16 setup merkle_js/merkle.r1cs zkptau/powersOfTau28_hez_final_10.ptau merkle_0000.zkey
         snarkjs zkey contribute merkle_0000.zkey merkle_0001.zkey --name="First contribution"
         snarkjs zkey export verificationkey merkle_0001.zkey verification_key.json
+    - run: node run_casesMerkle.js
 
-    - name: Setup zkeys for merkleN
+  merkleN:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+    - run: sudo apt update && sudo apt install -y rustc cargo
+    - run: |
+        git clone --branch v2.0.5 https://github.com/iden3/circom.git
+        cd circom && cargo build --release && cargo install --path circom
+    - run: npm install -g snarkjs
+    - run: circom merkleN.circom --r1cs --wasm --sym -o merkleN_js
+    - name: Setup powers of tau
       run: |
-        snarkjs groth16 setup merkleN.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkleN_0000.zkey
+        mkdir -p zkptau
+        cp powersOfTau28_hez_final_10.ptau zkptau/
+        wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
+    - run: |
+        snarkjs groth16 setup merkleN_js/merkleN.r1cs zkptau/powersOfTau28_hez_final_15.ptau merkleN_0000.zkey
         snarkjs zkey contribute merkleN_0000.zkey merkleN_0001.zkey --name="First contribution"
         snarkjs zkey export verificationkey merkleN_0001.zkey verification_key.json
+    - run: node run_casesMerkleN.js
 
-    - name: Run modular tests
-      run: node run_cases.js
-
-    - name: Run merkle tests (4 hojas)
-      run: node run_casesMerkle.js
-
-    - name: Run merkle tests (10 hojas)
-      run: node run_casesMerkleN.js
-
-
-    - name: Run merkle tests (10 hojas)
-      run: node run_casesMerkleN.js
 
