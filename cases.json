@@ -1,0 +1,15 @@
+{
+    "case1": { "leaves": [1000, 54, 40, 1], "target": 3, "q":156 },
+    "case2": { "leaves": [350,0,0,0], "target": 0, "q":50 },
+    "case3": { "leaves": [0, 94750, 4, 4], "target": 6, "q":13536 },
+    "case4": { "leaves": [1, 1, 54978, 1], "target": 3, "q":7854 },
+    "case5": {"leaves": [11,111,1111,11111], "target": 3, "q":1763 },
+    "case6": {"leaves": [0,0,0,0], "target": 0, "q":0 },
+    "case7": {"leaves": [0,7,0,0], "target": 0, "q":1},
+    "case8": {"leaves": [0,3,4,0], "target": 0, "q": 30},
+    "case9": {"leaves": [0,7,0,0], "target": 2, "q": 1},
+    "case10": {"leaves": [0,0,7,0], "target": 1, "q": 1}
+  }
+ 
+  
+
