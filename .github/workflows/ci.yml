@@ -17,8 +17,7 @@ jobs:
     - run: npm install -g snarkjs
     - name: Run suma_modular cases
       run: |
-        # Ya no compilamos ni corremos powers of tau en CI
-        # Usamos directamente los artefactos subidos al repo
+        # Usamos directamente lo subido al repo
         node run_cases.js
 
   merkle:
@@ -28,28 +27,11 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 24
-    - run: sudo apt update && sudo apt install -y rustc cargo
-    - run: |
-        git clone --branch v2.0.5 https://github.com/iden3/circom.git
-        cd circom && cargo build --release && cargo install --path circom
     - run: npm install -g snarkjs
-    - name: Compile merkle (7 hojas)
+    - name: Run merkle cases
       run: |
-        mkdir -p merkle_js
-        circom merkle.circom --r1cs --wasm --sym -o merkle_js
-    - name: Fix witness path for merkle
-      run: |
-        cp merkle_js/merkle_js/generate_witness.js merkle_js/
-        cp merkle_js/merkle_js/witness_calculator.js merkle_js/
-        cp merkle_js/merkle_js/merkle.wasm merkle_js/
-    - name: Setup powers of tau
-      run: |
-        mkdir -p zkptau
-        cp powersOfTau28_hez_final_10.ptau zkptau/
-        wget https://github.com/va0408/ZkProofs-MerkleTrees/releases/download/v1.0/powersOfTau28_hez_final_15.ptau -O zkptau/powersOfTau28_hez_final_15.ptau
-    - name: Export verification key
-      run: snarkjs zkey export verificationkey merkle_0001.zkey merkle_verification_key.json
-    - run: node run_casesMerkle.js
+        # Usamos directamente lo subido al repo
+        node run_casesMerkle.js
 
   merkleN:
     runs-on: ubuntu-latest
