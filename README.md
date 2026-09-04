@@ -1,7 +1,12 @@
 # ZkProofs-MerkleTrees
 
+The idea of this project was to implement Merkle trees of different sizes and compare both the execution times and the sizes of the generated artifacts. I started by testing with a Merkle tree of 4 leaves, then one of 10, and I thought about extending it to a larger range, between 15 and 30 leaves. For each one I prepared test cases that included correct situations, invalid cases, and also edge scenarios. The intention was to upload everything to GitHub Actions and take advantage of CI to automate the verifications. However, I ran into a limitation: very large trees require a powers of tau of considerable size, and the free GitHub server does not support that load. That forced me to reduce the scope and parallelize the tasks, so that MerkleN (with ten leaves), suma_modular, and Merkle (with four leaves) could run at the same time.
 
-Estos casos son para suma modular: 
+Each implementation needed its own configuration and dependencies, and every time I switched from one to another I had to restart the processes, which led me to limit the number of trees and test cases. In addition, any modification in the implementation implied generating a new folder with the witnesses, a new verification key, and repeating the setup, which made adding cases tedious. In the end, the trees I was able to run are more like toy examples, and the differences between extreme inputs were not very relevant: even with ten leaves and very large numbers, the times and sizes did not vary much. That is why I tried to make the cases representative as much as possible, even if they did not cover massive scenarios.
+
+In future implementations it would be interesting to experiment with larger trees, between 50 and 100 leaves, to observe how the proving and verification times scale. It would also be useful to automate the generation of test cases, because doing it manually becomes repetitive and does not add much new information. In contrast with what is seen in the papers, where trees with millions of leaves are used, this project remained at a small scale, but it served to understand the practical limitations of running cryptographic proofs in a free CI environment and to explore how circuits behave in controlled scenarios.
+
+# Estos casos son para suma modular: 
 Probamos tanto casos válidos (del 1 al 7) como inválidos (a partir del caso 8) dentro del primer cases.json; estos fallaron en la generación del witness con un Assert Failed, lo que demuestra soundness: el sistema no permite construir pruebas falsas.
 
 (para la parte de PERFORMANCE puedo mostrar que los tiempos y tamaños se reportan solo para los casos válidos, mientras que los inválidos terminan en error.]
