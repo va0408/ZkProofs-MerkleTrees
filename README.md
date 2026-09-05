@@ -22,7 +22,7 @@ My own implementation comes with its own constraints. It does not include recurs
 
 
 
-# Tablas
+# Tables
 ### Suma Modular (4 leaves)
 
 | Caso  | Leaves                  | Target | q    | Witness (ms) | Proving (ms) | Proof size | Verification (ms) | Result |
@@ -61,7 +61,9 @@ My own implementation comes with its own constraints. It does not include recurs
 | case3 | [2,2,2,2,2,2,2,2,2,2]         | 6      | 2  | 86.847       | 1374.000     | 806 bytes  | 606.011           |  OK     |
 | case4 | [0,0,0,0,0,0,0,0,0,0]         | 0      | 0  | 117.386      | 1372.000     | 802 bytes  | 575.830           |  OK     |
 | case5 | [3,1,4,1,5,9,2,6,5,3]         | 4      | 5  | 85.520       | 1401.000     | 801 bytes  | 588.434           |  OK     |
+
 ```
+
 # Fourth Question
 The extensions proposed in the Reckle+ Trees paper include recursion optimizations such as bucketing and the support for q‑ary trees like Merkle Patricia Tries. In principle, both ideas could be implemented in Circom, but they require a level of circuit parametrization and infrastructure that was not practical within the scope of this project. Scaling Groth16 to millions of leaves is also not feasible without distributed infrastructure, and recursion remains an inherent limitation of this proof system. For these reasons, the project focused on smaller circuits that could be reproduced in a didactic environment. What was actually implemented were Merkle trees of four and ten leaves, together with a modular sum gadget. Invalid cases in Merkle4 correctly triggered assertion failures, which demonstrates soundness, and since MerkleN uses the same templates with only additional levels, the same rejection behavior applies. Completeness and soundness are therefore preserved across both circuits.
 
@@ -73,6 +75,7 @@ Experiments were run locally and in CI, using GitHub free runners and a local ma
 
 # Build in/ run instructions
 (the entropy for everything was "LOLO" )
+```
 circomc alias of `circom --r1cs --wasm --sym -l ~/circomlib/circuits'
 
 for running suma_modular:
@@ -123,3 +126,4 @@ snarkjs zkey contribute merkleN_0000.zkey merkleN_0001.zkey --name="First contri
 snarkjs zkey export verificationkey merkleN_0001.zkey verification_key_merkleN.json
 
 node run_casesMerkleN.js
+```
