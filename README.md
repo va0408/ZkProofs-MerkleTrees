@@ -6,14 +6,6 @@ Each implementation needed its own configuration and dependencies, and every tim
 
 In future implementations it would be interesting to experiment with larger trees, between 50 and 100 leaves, to observe how the proving and verification times scale. It would also be useful to automate the generation of test cases, because doing it manually becomes repetitive and does not add much new information. In contrast with what is seen in the papers, where trees with millions of leaves are used, this project remained at a small scale, but it served to understand the practical limitations of running cryptographic proofs in a free CI environment and to explore how circuits behave in controlled scenarios.
 
-# Estos casos son para suma modular: 
-Probamos tanto casos válidos (del 1 al 7) como inválidos (a partir del caso 8) dentro del primer cases.json; estos fallaron en la generación del witness con un Assert Failed, lo que demuestra soundness: el sistema no permite construir pruebas falsas.
-
-(para la parte de PERFORMANCE puedo mostrar que los tiempos y tamaños se reportan solo para los casos válidos, mientras que los inválidos terminan en error.]
-Para hacer los testigos y probar distintos casos inválidos:
-El script run_cases.js sobreescribe input.json en cada iteración. Si se corre manualmente generate_witness.js con input.json, puede que el archivo contenga un caso inválido y falle en witness. Para pruebas manuales, es mejor guardar cada input en un archivo separado (input_caseX.json). (DE TODAS FORMAS, LOS ERRORES QUE CONSEGUÍ SON DE TESTIGO HASTA AHORA).
-
-casos para el arbol.
 # First Question
 The paper on Reckle Trees addresses a known problem in Merkle trees: although updates can be fast, batch proofs depend on the size of the set and are not efficiently updatable. To solve this, the authors propose a scheme that combines recursive SNARKs with canonical hashing, achieving batch proofs that are both succinct and updatable in logarithmic time. The zk-proof ensures that a subset of leaves truly belongs to the tree and that the Map/Reduce computations over those leaves are correct without revealing their content. What is validated is the consistency between the canonical digests and the root of the tree, along with the correctness of the Map and Reduce results.
 
@@ -92,3 +84,9 @@ node run_casesMerkle.js
 | case5 | [3,1,4,1,5,9,2,6,5,3]         | 4      | 5  | 85.520       | 1401.000     | 801 bytes  | 588.434           |  OK     |
 
 For MerkleN (10 leaves), I only tested valid cases due to time constraints. Anyways, the implementation is structurally identical to Merkle4, just with a few more levels. Invalid cases in Merkle4 correctly triggered assertion failures, demonstrating soundness. MerkleN uses the same SumaModular and MerkleReduce templates, so the same rejection behavior applies. That's why completeness and soundness are preserved across both circuits.
+
+# Valid and Invalid Cases
+I tested both valid cases (1–7) and invalid cases (≥8) in the first cases.json. Invalid cases failed during witness generation with an Assert Failed error, which demonstrates soundness: the system does not allow constructing false proofs. Performance metrics are reported only for valid cases, while invalid ones terminate with errors.
+# About the script and witnesses:
+The script run_cases.js overwrites input.json at each iteration. If generate_witness.js is run manually with input.json, the file may contain an invalid case and fail at witness generation. For manual testing, it is better to store each input in a separate file (input_caseX.json). In CI environments, all runs start from scratch, so cached witnesses are not preserved. This limits reproducing certain error types that depend on previously stored witnesses.
+Other error types could not be reproduced in GitHub CI, since they depend on cached witnesses from previous runs. In a clean environment, each run starts fresh, so only witness-level assertion failures are observable. This is the limit of my current knowledge; alternative methods may exist, but were out of scope for this project.
