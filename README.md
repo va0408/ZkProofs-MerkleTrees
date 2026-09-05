@@ -77,7 +77,10 @@ Link to the CI:
 Experiments were run locally on a machine with Intel(R) Core(TM) i7-2600 CPU, x86_64 architecture, 4 physical cores and 8 logical CPUs, equipped with 15 GB of RAM (about 12 GB available during execution). The environment was Ubuntu 22.04 with Node.js v24.19.0; and in CI, using GitHub free runners. Proof size remained stable at around 800 bytes with Groth16, which is much smaller than the 112 KiB reported for Plonky2. Verification time was also stable, between 510 and 600 milliseconds, and independent of circuit size. Proving time grew linearly with the number of constraints: between 600 and 750 milliseconds for the modular sum circuit, around 950 milliseconds for Merkle4, and between 1.3 and 1.5 seconds for Merkle10. Performance metrics are reported only for valid cases, while invalid ones terminate with errors. Invalid cases failed during witness generation with an Assert Failed error, which demonstrates soundness. Compared to the baseline in the Reckle+ Trees paper, my prototype is a toy model. The paper reports proofs of fixed size and verification in milliseconds, scaling to millions of leaves with recursion and bucketing. My implementation reproduces the idea at a very small scale, with stable proof size and verification cost, but without recursion or large‑scale optimizations.
 
 # Build in/ run instructions
-(the entropy for everything was "LOLO" )
+The project requires Node.js (v24.19.0 or later), Circom v2.1.9, and snarkJS installed globally. The circuits also depend on poseidon.circom from circomlib, and a powers of tau file (.ptau) generated with snarkJS.
+
+(The entropy used for all contributions was “LOLO”.)
+
 ```
 circomc alias of `circom --r1cs --wasm --sym -l ~/circomlib/circuits'
 
@@ -90,8 +93,10 @@ snarkjs zkey contribute suma_modular_0000.zkey suma_modular_0001.zkey --name="1s
 snarkjs zkey export verificationkey suma_modular_0001.zkey verification_key_suma_modular.json
 
 node run_cases.js
+```
 
-for running merkle:
+For the Merkle (4 leaves) circuit, compile with Circom, prepare a powers of tau with 15 powers, and run the benchmark:
+```
 rm -rf build_merkle
 mkdir build_merkle
 circom merkle.circom --r1cs --wasm --sym -l ~/circomlib/circuits -o build_merkle
@@ -112,7 +117,9 @@ snarkjs zkey export verificationkey merkle_0001.zkey verification_key_merkle.jso
 
 node run_casesMerkle.js
 
-for running merkleN:
+```
+For the MerkleN (10 leaves) circuit, the steps are analogous:
+```
 rm -rf build_merkleN
 mkdir build_merkleN
 circom merkleN.circom --r1cs --wasm --sym -l ~/circomlib/circuits -o build_merkleN
