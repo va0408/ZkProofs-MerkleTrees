@@ -82,7 +82,7 @@ The project requires Node.js (v24.19.0 or later), Circom v2.1.9, and snarkJS ins
 (The entropy used for all contributions was “LOLO”.)
 
 ```
-circomc alias of `circom --r1cs --wasm --sym -l ~/circomlib/circuits'
+
 
 for running suma_modular:
 snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
