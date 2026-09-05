@@ -82,7 +82,7 @@ node run_casesMerkle.js
 | case3 | [2,2,2,2,2,2,2,2,2,2]         | 6      | 2  | 86.847       | 1374.000     | 806 bytes  | 606.011           |  OK     |
 | case4 | [0,0,0,0,0,0,0,0,0,0]         | 0      | 0  | 117.386      | 1372.000     | 802 bytes  | 575.830           |  OK     |
 | case5 | [3,1,4,1,5,9,2,6,5,3]         | 4      | 5  | 85.520       | 1401.000     | 801 bytes  | 588.434           |  OK     |
----
+```
 
 For MerkleN (10 leaves), I only tested valid cases due to time constraints. Anyways, the implementation is structurally identical to Merkle4, just with a few more levels. Invalid cases in Merkle4 correctly triggered assertion failures, demonstrating soundness. MerkleN uses the same SumaModular and MerkleReduce templates, so the same rejection behavior applies. That's why completeness and soundness are preserved across both circuits.
 
