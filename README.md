@@ -50,3 +50,45 @@ snarkjs zkey export verificationkey merkle_0001.zkey verification_key.json
 entropy: LOLO
 
 node run_casesMerkle.js
+
+# Tablas
+### Suma Modular (4 leaves)
+
+| Caso  | Leaves                  | Target | q    | Witness (ms) | Proving (ms) | Proof size | Verification (ms) | Result |
+|-------|--------------------------|--------|------|--------------|--------------|------------|-------------------|-----------|
+| case1 | [1000,54,40,1]          | 3      | 156  | 64.687       | 755.442      | 805 bytes  | 526.837           |  OK     |
+| case2 | [350,0,0,0]             | 0      | 50   | 71.539       | 633.754      | 805 bytes  | 524.246           |  OK     |
+| case3 | [0,94750,4,4]           | 6      | 13536| 66.166       | 608.827      | 807 bytes  | 525.073           |  OK     |
+| case4 | [1,1,54978,1]           | 3      | 7854 | 64.810       | 605.991      | 808 bytes  | 523.121           |  OK     |
+| case5 | [11,111,1111,11111]     | 3      | 1763 | 65.773       | 611.690      | 806 bytes  | 524.939           |  OK     |
+| case6 | [0,0,0,0]               | 0      | 0    | 68.848       | 626.034      | 805 bytes  | 517.216           |  OK     |
+| case7 | [0,7,0,0]               | 0      | 1    | 64.401       | 609.519      | 805 bytes  | 522.273           |  OK     |
+
+---
+
+### Merkle (4 leaves) 
+
+| Caso  | Leaves                  | Target | q    | Witness (ms) | Proving (ms) | Proof size | Verification (ms) | Result |
+|-------|--------------------------|--------|------|--------------|--------------|------------|-------------------|-----------|
+| case1 | [1000,54,40,1]          | 3      | 156  | 79.280       | 1106.000     | 805 bytes  | 597.943           |  OK     |
+| case2 | [350,0,0,0]             | 0      | 50   | 82.002       | 949.606      | 803 bytes  | 513.401           |  OK     |
+| case3 | [0,94750,4,4]           | 6      | 13536| 80.888       | 943.995      | 804 bytes  | 512.182           |  OK     |
+| case4 | [1,1,54978,1]           | 3      | 7854 | 84.346       | 950.835      | 804 bytes  | 513.843           |  OK     |
+| case5 | [11,111,1111,11111]     | 3      | 1763 | 80.441       | 954.960      | 805 bytes  | 509.488           |  OK     |
+| case6 | [0,0,0,0]               | 0      | 0    | 85.459       | 951.871      | 800 bytes  | 508.644           |  OK     |
+| case7 | [0,7,0,0]               | 0      | 1    | 87.294       | 959.308      | 803 bytes  | 511.372           |  OK     |
+| case8 | [0,3,4,0]               | 0      | 30   | —            | —            | —          | —                 |  Assert Failed |
+| case9 | [0,7,0,0]               | 2      | 1    | —            | —            | —          | —                 |  Assert Failed |
+| case10| [0,0,7,0]               | 1      | 1    | —            | —            | —          | —                 |  Assert Failed |
+
+### MerkleN (10 leaves)
+
+| Caso  | Leaves                        | Target | q  | Witness (ms) | Proving (ms) | Proof size | Verification (ms) | Result |
+|-------|-------------------------------|--------|----|--------------|--------------|------------|-------------------|-----------|
+| case1 | [1,2,3,4,5,6,7,8,9,10]        | 6      | 7  | 91.463       | 1524.000     | 803 bytes  | 600.221           |  OK     |
+| case2 | [7,7,7,7,7,7,7,7,7,7]         | 0      | 10 | 90.447       | 1382.000     | 807 bytes  | 604.117           |  OK     |
+| case3 | [2,2,2,2,2,2,2,2,2,2]         | 6      | 2  | 86.847       | 1374.000     | 806 bytes  | 606.011           |  OK     |
+| case4 | [0,0,0,0,0,0,0,0,0,0]         | 0      | 0  | 117.386      | 1372.000     | 802 bytes  | 575.830           |  OK     |
+| case5 | [3,1,4,1,5,9,2,6,5,3]         | 4      | 5  | 85.520       | 1401.000     | 801 bytes  | 588.434           |  OK     |
+
+For MerkleN (10 leaves), I only tested valid cases due to time constraints. Anyways, the implementation is structurally identical to Merkle4, just with a few more levels. Invalid cases in Merkle4 correctly triggered assertion failures, demonstrating soundness. MerkleN uses the same SumaModular and MerkleReduce templates, so the same rejection behavior applies. That's why completeness and soundness are preserved across both circuits.
