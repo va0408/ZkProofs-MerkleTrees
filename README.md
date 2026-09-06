@@ -91,6 +91,7 @@ Future work could explore larger trees (50–100 leaves) to observe how proving 
 The project requires Node.js (v24.19.0 or later), Circom v2.1.9, and snarkJS installed globally. The circuits also depend on poseidon.circom from circomlib, and a powers of tau file (.ptau) generated with snarkJS.
 
 (The entropy used for all contributions was “LOLO”.)
+
 (In some of the implementation files, it might appear "circomc", an alias of `circom --r1cs --wasm --sym -l ~/circomlib/circuits').
 
 ```
