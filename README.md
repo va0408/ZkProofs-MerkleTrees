@@ -13,8 +13,12 @@ The original paper uses Plonky2, a proving system with support for efficient rec
 So, my prototype reproduces the idea of Reckle+ Trees in an accessible and reproducible environment, even if it does not include the advanced recursion capabilities offered by Plonky2.
 
 # Third Question
-The paper highlights several limitations. While Plonky2 is a powerful proving system, it is difficult to reproduce in a didactic environment. Recursive proofs also remain costly at the leaf level (since recursion is the main bottleneck), which motivated techniques such as bucketing. Extending the scheme to q‑ary trees, for example Merkle Patricia Tries, was left as future work.
+The paper highlights several limitations. While Plonky2 is a powerful proving system, it is difficult to reproduce in a didactic environment. Recursive proofs also remain costly at the leaf level (since recursion is the main bottleneck), which motivated techniques such as bucketing (to reduce recursion depth and improve prover time), and extending to q‑ary trees (to align with Ethereum’s state representation), for example Merkle Patricia Tries, that was left as future work. Another improvement could be introducing automated test input generation to make experiments more systematic and scalable.
+
+Each of these extensions is motivated either by efficiency (bucketing), applicability (q‑ary trees), or reproducibility (automation), and together they show how the construction could be improved beyond its current scope.
+
 My implementation comes with its constraints as well. It does not include recursion nor bucketing, and instead relies on templates with a fixed number of leaves, such as Merkle4 or Merkle10, so changing N requires generating a new version of the circuit, which limits flexibility. Extending the scheme to q‑ary trees like Merkle Patricia Tries seems possible in theory but requires parametrized circuits that are not realistic in Circom at this scale (at least, with the resources and knowledge I have). As a result, the system scales to dozens of leaves but not to millions, as demonstrated in the paper. Verification stayed efficient, but proving grows linearly with the number of constraints. Another possible extension is automating the creation of test inputs, that would make experiments more systematic and less repetitive and allow scaling to larger sets of leaves without a lot of manual work. This is motivated by the difficulty of having multiple input files and witnesses in CI. Overall, this is a very toy implementation: it captures the core idea of Reckle+ Trees in an accessible and reproducible way, but without the advanced recursion or large‑scale optimizations of the original design.
+
 
 
 # Tables
