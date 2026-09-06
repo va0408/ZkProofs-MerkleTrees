@@ -94,10 +94,9 @@ The project requires Node.js (v24.19.0 or later), Circom v2.1.9, and snarkJS ins
 
 (In some of the implementation files, it might appear "circomc", an alias of `circom --r1cs --wasm --sym -l ~/circomlib/circuits').
 
+# suma_modular: 
 ```
 
-
-for running suma_modular:
 snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
 snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
@@ -107,14 +106,13 @@ snarkjs zkey export verificationkey suma_modular_0001.zkey verification_key_suma
 
 node run_cases.js
 ```
-
-For the Merkle (4 leaves) circuit, compile with Circom, prepare a powers of tau with 15 powers, and run the benchmark:
+# Merkle(4 leaves)
+compile with Circom, prepare a powers of tau with 15 powers, and run the benchmark:
 ```
 rm -rf build_merkle
 mkdir build_merkle
 circom merkle.circom --r1cs --wasm --sym -l ~/circomlib/circuits -o build_merkle
 
-then
 
 mv build_merkle/merkle_js/* build_merkle/
 rm -rf build_merkle/merkle_js
@@ -131,7 +129,7 @@ snarkjs zkey export verificationkey merkle_0001.zkey verification_key_merkle.jso
 node run_casesMerkle.js
 
 ```
-For the MerkleN (10 leaves) circuit, the steps are analogous:
+# MerkleN (10 leaves):
 ```
 rm -rf build_merkleN
 mkdir build_merkleN
@@ -139,7 +137,7 @@ circom merkleN.circom --r1cs --wasm --sym -l ~/circomlib/circuits -o build_merkl
 mv build_merkleN/merkleN_js/* build_merkleN/
 rm -rf build_merkleN/merkleN_js
 ls build_merkleN
-then :
+ 
 snarkjs powersoftau new bn128 15 pot15_0000.ptau -v
 snarkjs powersoftau contribute pot15_0000.ptau pot15_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot15_0001.ptau pot15_final.ptau -v
